@@ -666,23 +666,6 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .parts li::before { content: counter(p); position: absolute; left: 0; top: 1px; width: 24px; height: 24px; border-radius: 50%; background: var(--amber); color: var(--ink); font-size: 12px; font-weight: 800; display: grid; place-items: center; }
 .parts b { color: var(--ink); }
 .plan { background: #fff; border-radius: var(--r-media); padding: 18px; }
-.plan svg { width: 100%; height: auto; display: block; font-family: var(--font); }
-.plan .p-line { stroke: var(--ink); stroke-width: .6; }
-.plan .p-hatch { stroke: var(--line-2); stroke-width: 1; }
-.plan .p-zone { fill: var(--amber-tint); stroke: var(--amber); stroke-width: .5; stroke-dasharray: 2 1.5; }
-.plan .p-dash { fill: none; stroke: var(--muted); stroke-width: .5; stroke-dasharray: 1.5 1.2; }
-.plan .p-door { stroke: var(--muted); stroke-width: .8; }
-.plan .p-cab { fill: var(--ink); }
-.plan .p-cabtext { fill: #fff; font-size: 4.2px; font-weight: 700; }
-.plan .p-cabsmall { fill: #c9cfd5; font-size: 3.4px; }
-.plan .p-dim { stroke: var(--ink-2); stroke-width: .4; }
-.plan .p-small { fill: var(--ink-2); font-size: 3.4px; }
-.plan .p-label { fill: var(--ink); font-size: 4.2px; font-weight: 700; }
-.plan .p-outlet { fill: #fff; stroke: var(--ink); stroke-width: .5; }
-.plan .p-bar { fill: #d9c3a5; stroke: #8a6a45; stroke-width: .5; }
-.plan .p-person { fill: var(--line-2); stroke: var(--ink-2); stroke-width: .5; }
-.plan .p-sight { stroke: var(--amber-text); stroke-width: .6; stroke-dasharray: 2 1.5; }
-@media (min-width: 900px) { .split.plan-split { grid-template-columns: 1.35fr 1fr; gap: 48px; } }
 .review-status { border: 1px solid var(--amber); background: var(--amber-tint); border-radius: var(--r-media); padding: 24px 26px; max-width: 900px; }
 .review-status h2 { font-size: 22px; margin-bottom: 8px; }
 .review-status p { margin: 0; color: var(--ink); }
