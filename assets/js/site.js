@@ -11,7 +11,8 @@
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
-  function money(n, cents) { return "$" + n.toLocaleString("en-US", { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 }); }
+  // Whole dollars, as every menu price is. Only a price with cents (the calculator moves in 50-cent steps) shows them.
+  function money(n) { var c = Math.round(n * 100) % 100 !== 0; return "$" + n.toLocaleString("en-US", { minimumFractionDigits: c ? 2 : 0, maximumFractionDigits: c ? 2 : 0 }); }
 
   // ---- Analytics (optional) and first-touch source --------------------------
   if (GOATCOUNTER) {
@@ -164,7 +165,7 @@
         });
         var n = count();
         go.disabled = !n;
-        go.textContent = n ? "Continue, " + money(total(), true) : "Choose a drink";
+        go.textContent = n ? "Continue, " + money(total()) : "Choose a drink";
         hint.textContent = msg || (alcohol() >= MAX_ITEMS ? "That's two drinks with alcohol, the limit for one scan." : alcohol() || !n ? "You'll scan your ID after you choose." : "No ID needed for this order.");
         hint.classList.toggle("warn", !!msg);
       }
@@ -230,7 +231,7 @@
     }
 
     function pay() {
-      var el = show('<div class="scr-center"><p>' + names() + '</p><div class="total">' + money(total(), true) + '</div>' +
+      var el = show('<div class="scr-center"><p>' + names() + '</p><div class="total">' + money(total()) + '</div>' +
         '<div class="tap-zone"><svg viewBox="0 0 48 48" fill="none" stroke-width="3" stroke-linecap="round"><path d="M17 14c3 3 3 17 0 20M24 9c5 5 5 25 0 30M31 4c7 7 7 33 0 40"/></svg></div>' +
         '<p>Tap your card or phone. You&rsquo;re charged when your drinks reach the port.</p></div>' +
         '<div class="scr-foot"><button class="scr-btn" type="button">Simulate a tap</button><button class="scr-btn ghost" type="button">Cancel order</button></div>', 2, "pay");
@@ -278,7 +279,7 @@
     }
 
     function done() {
-      var el = show('<div class="scr-center">' + ICON_CHECK + '<h3>Enjoy your night</h3><p>Take your ' + names(" and ") + ' from the port below. Charged ' + money(total(), true) + '.</p></div>' +
+      var el = show('<div class="scr-center">' + ICON_CHECK + '<h3>Enjoy your night</h3><p>Take your ' + names(" and ") + ' from the port below. Charged ' + money(total()) + '.</p></div>' +
         '<div class="scr-foot"><button class="scr-btn" type="button">Start over</button></div>', 4, "done");
       $(".scr-btn", el).addEventListener("click", reset);
       track("demo-complete-" + scenario);
@@ -320,10 +321,10 @@
       var nightsMo = n * 52 / 12;
       var moved = Math.round(c * mv), kept = Math.round(w * sh), mdrinks = moved + kept;
       var month = kept * pr * nightsMo, cogs = month * COGS, fees = month * FEES, contrib = month - cogs - fees;
-      set("nights", String(n)); set("price", money(pr, true)); set("cans", String(c)); set("move", Math.round(mv * 100) + "%");
+      set("nights", String(n)); set("price", money(pr)); set("cans", String(c)); set("move", Math.round(mv * 100) + "%");
       set("walk", String(w)); set("share", Math.round(sh * 100) + "%");
       $('[data-r="nights"]', root).textContent = Math.abs(nightsMo - Math.round(nightsMo)) < 0.05 ? String(Math.round(nightsMo)) : nightsMo.toFixed(1);
-      set("moved", String(moved)); set("kept", String(kept)); set("mdrinks", String(mdrinks)); set("msales", money(mdrinks * pr, true)); set("mmonth", money(Math.round(mdrinks * pr * nightsMo)));
+      set("moved", String(moved)); set("kept", String(kept)); set("mdrinks", String(mdrinks)); set("msales", money(Math.round(mdrinks * pr))); set("mmonth", money(Math.round(mdrinks * pr * nightsMo)));
       set("month", money(Math.round(month))); set("cogs", "-" + money(Math.round(cogs))); set("fees", "-" + money(Math.round(fees))); set("contrib", money(Math.round(contrib)));
       var cost = costIn && costIn.value !== "" ? Math.max(0, +costIn.value) : null;
       if (costRows) costRows.hidden = cost === null;
@@ -396,7 +397,7 @@
       var lows = m.stock.filter(function (s) { return s[2] <= 2; });
       k("alert").textContent = lows.length ? lows[0][1] + " is down to " + lows[0][2] + ". " + (texts.getAttribute("aria-checked") === "true" ? "Text sent to Sam at " + m.lowAt + "." : "Low-stock texts are off.") : "All rows are above their restock threshold.";
       k("feed").innerHTML = m.feed.slice(0, 7).map(function (f, i) {
-        var body = '<span><b>' + f.t + '</b> ' + f.text + (f.blocked ? ' <em class="tag">ID blocked</em>' : "") + '</span><span class="num">' + (f.amt ? money(f.amt, true) : "") + '</span>';
+        var body = '<span><b>' + f.t + '</b> ' + f.text + (f.blocked ? ' <em class="tag">ID blocked</em>' : "") + '</span><span class="num">' + (f.amt ? money(f.amt) : "") + '</span>';
         if (!f.sale) return '<li class="' + (f.staff ? "staff" : "") + '">' + body + "</li>";
         var detail = open === f ? '<div class="sale-detail"><p>ID check: valid, 21 or older, matched to the photo. Limit code ' + f.id + ' (one-way, deleted at close).</p>' +
           (f.blocked ? '<p class="ok">This ID can&rsquo;t buy from any machine here until close.</p>' :
