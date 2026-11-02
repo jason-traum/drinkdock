@@ -131,6 +131,7 @@ h4 { font-size: 17px; line-height: 1.3; font-weight: 500; letter-spacing: 0; }
 /* ---------- sections ---------- */
 .section { padding: 80px 0; }
 .section-sm { padding: 56px 0; }
+.section-end { padding: 64px 0 96px; }
 .stage { background: radial-gradient(ellipse 80% 70% at 50% 40%, var(--stage-hi), var(--stage-lo)); }
 .band-stage { background: var(--stage); }
 .band-night { background: var(--night); color: var(--night-text); }
